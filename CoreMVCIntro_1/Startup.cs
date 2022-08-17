@@ -37,7 +37,12 @@ namespace CoreMVCIntro_1
 
             //Yukarıdaki ifadede dikkat ederseniz UseLazyLoadingProxies kullanılmıstır...Bu durum .Net Core'daki Lazy Loading'in sürekli tetiklenebilmesi adına environment'inizi garanti altına almanızı saglar...
 
-            //Todo : Session işlemleri
+            services.AddSession(x =>
+            {
+                x.IdleTimeout = TimeSpan.FromMinutes(20);
+                x.Cookie.HttpOnly = true;
+                x.Cookie.IsEssential = true;
+            });
 
         }
 
@@ -57,6 +62,9 @@ namespace CoreMVCIntro_1
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseSession();
+
             app.UseHttpsRedirection();
 
             app.UseStaticFiles(); //wwwroot isimli klasorun projeye acılması icin gerekli olan ifadedir...
@@ -76,7 +84,7 @@ namespace CoreMVCIntro_1
 
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Category}/{action=Index}/{id?}");
             });
         }
     }
